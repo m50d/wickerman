@@ -1,20 +1,24 @@
 package com.github.m50d.wickerman.immutable
 
 import com.github.m50d.wickerman.mutable.Iterator
+import com.github.m50d.wickerman
 
 @deprecated("""Unsafe operations on immutable collections don't make a lot of sense.
 Safe code should use safe iteration methods like foreach and fold*.
 High-performance code likely wants to use mutable collections instead.""", "2.13")
-trait Iterable[A] extends SafeIterable[A] {
+class Iterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends SafeIterable[A](step) with wickerman.mutable.Iterable[A] {
   def iterator = new Iterator[A] {
     private[this] var current = Iterable.this: SafeIterable[A]
-    override def hasNext = current.step.isDefined
+    override def hasNext = current.step().isDefined
     override def next = {
-      val (r, c) = current.step.get
+      val (r, c) = current.step().get
       current = c
       r
     }
   }
-  def isEmpty = step.isEmpty
-  def head = step.get._1
+  /**
+   * Overrides are not necessary but can make intent clearer and/or perform betters
+   */
+  override def isEmpty = step().isEmpty
+  override def head = step().get._1
 }
