@@ -17,7 +17,7 @@ class Iterable[A](step: () ⇒ Option[(A, ImmutableIterable[A])]) extends Immuta
     }
   }
   /**
-   * Overrides are not necessary but can make intent clearer and/or perform betters
+   * Overrides are not necessary but can make intent clearer and/or perform better
    */
   override def isEmpty = step().isEmpty
   override def head = step().get._1

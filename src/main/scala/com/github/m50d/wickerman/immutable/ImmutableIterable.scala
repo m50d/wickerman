@@ -38,8 +38,10 @@ case class ImmutableIterable[A](step: () ⇒ Option[(A, ImmutableIterable[A])]) 
     case Some((a, n)) ⇒ if (p(a)) Some(0) else n.safeIndexWhere(p).map(1.+)
   }
 
-  def reverse = step() match {
-    case None ⇒ ImmutableIterable(() ⇒ None)
-    case Some((a, n)) => ???
+  protected def reversePlus(tail: ImmutableIterable[A]): ImmutableIterable[A] = step() match {
+    case None ⇒ tail
+    case Some((a, n)) ⇒ n.reversePlus(ImmutableIterable(() ⇒ Some((a, tail))))
   }
+
+  def reverse = reversePlus(ImmutableIterable(() ⇒ None))
 }
