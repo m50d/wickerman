@@ -3,7 +3,7 @@ import com.github.m50d.wickerman
 
 import scala.annotation.tailrec
 
-case class SafeIterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends wickerman.SafeIterable[A] {
+case class ImmutableIterable[A](step: () ⇒ Option[(A, ImmutableIterable[A])]) extends wickerman.SafeIterable[A] {
   /**
    * final to demonstrate the possibility of @tailrec
    * Real API would perhaps be trampolined or just stack-unsafe
@@ -39,7 +39,7 @@ case class SafeIterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends wi
   }
 
   def reverse = step() match {
-    case None ⇒ SafeIterable(() ⇒ None)
+    case None ⇒ ImmutableIterable(() ⇒ None)
     case Some((a, n)) => ???
   }
 }
