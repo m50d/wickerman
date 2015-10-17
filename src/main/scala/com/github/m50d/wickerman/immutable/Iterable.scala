@@ -6,7 +6,7 @@ import com.github.m50d.wickerman
 @deprecated("""Unsafe operations on immutable collections don't make a lot of sense.
 Safe code should use safe iteration methods like foreach and fold*.
 High-performance code likely wants to use mutable collections instead.""", "2.13")
-class Iterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends SafeIterable[A](step) with wickerman.mutable.Iterable[A] {
+class Iterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends SafeIterable[A](step) with com.github.m50d.wickerman.Iterable[A] {
   def iterator = new Iterator[A] {
     private[this] var current = Iterable.this: SafeIterable[A]
     override def hasNext = current.step().isDefined

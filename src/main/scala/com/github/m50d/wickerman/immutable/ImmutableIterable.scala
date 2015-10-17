@@ -1,16 +1,14 @@
 package com.github.m50d.wickerman.immutable
+import com.github.m50d.wickerman
 
 import scala.annotation.tailrec
 
-/**
- * Assumed immutable
- */
-case class SafeIterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) {
+case class SafeIterable[A](step: () ⇒ Option[(A, SafeIterable[A])]) extends wickerman.SafeIterable[A] {
   /**
    * final to demonstrate the possibility of @tailrec
    * Real API would perhaps be trampolined or just stack-unsafe
    */
-  @tailrec final def foldLeft[B](z: B)(op: (B, A) ⇒ B): B = step() match {
+  @tailrec final override def foldLeft[B](z: B)(op: (B, A) ⇒ B): B = step() match {
     case None ⇒ z
     case Some((a, n)) ⇒ n.foldLeft(op(z, a))(op)
   }
