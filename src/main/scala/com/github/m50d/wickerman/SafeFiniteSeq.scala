@@ -11,8 +11,8 @@ trait SafeFiniteSeq[C[X] <: SafeFiniteSeq[C, X], A] {
   //  def to
   def map[B](f: A ⇒ B): C[B]
   def flatMap[B](f: A ⇒ C[B]): C[B]
-  def ++(other: Iterable[A]): Iterable[A]
-  def zip[B](other: Iterable[B]): Iterable[(A, B)]
-  def partition(p: A ⇒ Boolean): (Iterable[A], Iterable[A])
-  def drop(i: Int): Iterable[A]
+  def ++(other: C[A]): C[A]
+  def zip[B](other: C[B]): C[(A, B)]
+  def partition(p: A ⇒ Boolean): (C[A], C[A])
+  def safeDrop(i: Int): Option[C[A]]
 }
